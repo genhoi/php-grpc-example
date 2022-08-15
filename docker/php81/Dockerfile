@@ -14,7 +14,7 @@ RUN apt-get update \
 
 FROM php:8.1.8 as bin_loader
 
-ENV RR_VERSION=2.11.0-beta.1
+ENV RR_VERSION=2.11.0-rc.1
 ENV PROTOBUF_VERSION=21.3
 
 RUN apt-get update \
