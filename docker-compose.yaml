@@ -21,7 +21,6 @@ services:
     ports:
       - 22801:11802
     environment:
-      GRPCUI_ARGS: '-import-path=/proto -proto=/proto/echo/echo_service.v1.proto'
       GRPCUI_SERVER: 'app:9001'
       GRPCUI_PORT: 11802
     depends_on:

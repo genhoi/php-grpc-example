@@ -14,6 +14,10 @@ metrics:
 
 grpc:
   listen: "tcp://0.0.0.0:${RR_GRPC_PORT}"
+  reflection_server:
+    include:
+      - "/usr/bin/include"
+      - "/app/proto"
   proto:
     - "/app/proto/echo/echo_service.v1.proto"
   pool:
