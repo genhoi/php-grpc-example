@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: docker/php81
+    ports:
+      - 22800:9001 # grpc
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - .rr.yaml:/etc/rr.yaml:ro
+    environment:
+      RR_GRPC_PORT: 9001
+      RR_METRICS_PORT: 9180
+      RR_GRPC_WORKERS_COUNT: 1
+      RR_GRPC_WORKERS_DEBUG: false
+  grpcui:
+    build:
+      context: docker/grpcui
+    volumes:
+      - ./proto:/proto
+    ports:
+      - 22801:11802
+    environment:
+      GRPCUI_ARGS: '-import-path=/proto -proto=/proto/echo/echo_service.v1.proto'
+      GRPCUI_SERVER: 'app:9001'
+      GRPCUI_PORT: 11802
+    depends_on:
+      - app

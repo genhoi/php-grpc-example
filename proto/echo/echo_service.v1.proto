@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package platform.echo.v1;
+
+option php_namespace = "Platform\\Echo\\V1";
+option php_metadata_namespace = "Platform\\Echo\\V1\\Metadata";
+
+import "echo/methods/get_string.v1.proto";
+
+// buf:lint:ignore IMPORT_USED
+import "common/error_details.v1.proto";
+// buf:lint:ignore IMPORT_USED
+import "common/error_status.v1.proto";
+
+service EchoService {
+    rpc GetString(GetStringRequest) returns (GetStringResponse);
+}

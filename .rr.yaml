@@ -1,0 +1,21 @@
+version: "2.7"
+
+server:
+  command: "php /app/public/index.php"
+  env:
+    - APP_RUNTIME: 'Baldinof\RoadRunnerBundle\Runtime\Runtime'
+    - RR_MODE: 'grpc'
+
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+metrics:
+  address: "0.0.0.0:${RR_METRICS_PORT}"
+
+grpc:
+  listen: "tcp://0.0.0.0:${RR_GRPC_PORT}"
+  proto:
+    - "/app/proto/echo/echo_service.v1.proto"
+  pool:
+    num_workers: ${RR_GRPC_WORKERS_COUNT}
+    debug: ${RR_GRPC_WORKERS_DEBUG}

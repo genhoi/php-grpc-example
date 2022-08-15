@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package platform.echo.v1;
+
+option php_namespace = "Platform\\Echo\\V1";
+option php_metadata_namespace = "Platform\\Echo\\V1\\Metadata";
+
+message GetStringRequest {
+}
+
+message GetStringResponse {
+    string result = 1;
+}
