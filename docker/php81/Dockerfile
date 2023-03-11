@@ -1,6 +1,6 @@
-FROM php:8.1.8 as grpc_php_plugin
+FROM php:8.1.16 as grpc_php_plugin
 
-ENV GRPC_VERSION=1.45.2
+ENV GRPC_VERSION=1.50.0
 
 RUN apt-get update \
     && apt-get -y --no-install-recommends install curl unzip git build-essential automake libtool cmake \
@@ -12,10 +12,10 @@ RUN apt-get update \
     && make protoc grpc_php_plugin \
     && mv /grpc/cmake/build/grpc_php_plugin /usr/bin/grpc_php_plugin
 
-FROM php:8.1.8 as bin_loader
+FROM php:8.1.16 as bin_loader
 
-ENV RR_VERSION=2.11.0-rc.1
-ENV PROTOBUF_VERSION=21.3
+ENV RR_VERSION=2.12.3
+ENV PROTOBUF_VERSION=21.8
 
 RUN apt-get update \
     && apt-get -y --no-install-recommends install curl unzip \
@@ -28,15 +28,16 @@ RUN apt-get update \
     && mv /tmp/protoc/bin/protoc /usr/bin/protoc \
     && mv /tmp/protoc/include /usr/bin/include
 
-FROM php:8.1.8
+FROM php:8.1.16
 
 ARG WITH_XDEBUG=0
 
 ENV TERM xterm
 
-COPY --from=mlocati/php-extension-installer:1.5.11 /usr/bin/install-php-extensions /usr/local/bin/
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions \
+RUN chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions \
     grpc \
     protobuf \
     intl \
@@ -78,6 +79,5 @@ COPY --from=grpc_php_plugin /usr/bin/grpc_php_plugin /usr/bin/grpc_php_plugin
 COPY --from=composer:2.3.10 /usr/bin/composer /usr/bin/composer
 
 CMD ["/usr/bin/rr", "serve"]
-
 
 STOPSIGNAL SIGTERM
